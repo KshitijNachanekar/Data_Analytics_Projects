@@ -1,0 +1,6 @@
+*.pbix binary
+*.png binary
+*.jpg binary
+*.csv text eol=lf
+*.tmdl text eol=lf
+*.json text eol=lf

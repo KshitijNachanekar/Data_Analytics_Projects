@@ -1,0 +1,235 @@
+table Restaurants
+	lineageTag: 2ff77753-f349-4d43-9626-14891ddb3117
+
+	column 'Restaurant ID'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 57b3be1c-aaff-4172-8302-6e6efc4f0221
+		summarizeBy: none
+		sourceColumn: Restaurant ID
+
+	column 'Restaurant Name'
+		dataType: string
+		lineageTag: bdd72bed-8be7-40b8-9b61-0b236fde1647
+		summarizeBy: none
+		sourceColumn: Restaurant Name
+
+	column Brand
+		dataType: string
+		lineageTag: 3d820cc9-68e8-4c1f-9d9b-65ba9c6ae33c
+		summarizeBy: none
+		sourceColumn: Brand
+
+	column City
+		dataType: string
+		lineageTag: d059c5e8-cb48-4713-b34c-8d733d85658d
+		summarizeBy: none
+		sourceColumn: City
+
+	column State
+		dataType: string
+		lineageTag: 836b4639-d9d9-4fe0-a4ff-1d0700487879
+		summarizeBy: none
+		sourceColumn: State
+
+	column Region
+		dataType: string
+		lineageTag: 8dae2e8f-6d87-464e-9c64-868eddc67579
+		summarizeBy: none
+		sourceColumn: Region
+
+	column Rating
+		dataType: double
+		formatString: 0.0
+		lineageTag: 705517fa-d527-4aa5-922b-c68f5082e5af
+		summarizeBy: none
+		sourceColumn: Rating
+
+	column 'Rating Status'
+		dataType: string
+		lineageTag: b9a659ff-6d47-4a3b-a50c-685b2459f561
+		summarizeBy: none
+		sourceColumn: Rating Status
+
+	column 'Rating Band'
+		dataType: string
+		lineageTag: 4d24ccfe-9dea-41ae-b7f1-81b469c21b23
+		summarizeBy: none
+		sourceColumn: Rating Band
+		sortByColumn: 'Rating Band Order'
+
+	column 'Rating Band Order'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 82b6cfda-aa38-45d2-b2d5-a131bf85ac10
+		summarizeBy: none
+		sourceColumn: Rating Band Order
+
+	column 'Primary Cuisine'
+		dataType: string
+		lineageTag: 4c351226-82a2-4120-b5ed-77d0409cfff1
+		summarizeBy: none
+		sourceColumn: Primary Cuisine
+
+	column 'Cuisine Count'
+		dataType: int64
+		formatString: 0
+		lineageTag: 11deaddd-7bfb-407c-9c49-c879391c0d3f
+		summarizeBy: none
+		sourceColumn: Cuisine Count
+
+	column 'Price for One'
+		dataType: double
+		formatString: #,0
+		lineageTag: 80e9aaff-8183-4de2-a4c1-b47129e1565d
+		summarizeBy: none
+		sourceColumn: Price for One
+
+	column 'Price Band'
+		dataType: string
+		lineageTag: b82fa577-c3f8-477f-bb36-cb80788474c5
+		summarizeBy: none
+		sourceColumn: Price Band
+		sortByColumn: 'Price Band Order'
+
+	column 'Price Band Order'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 7def1a7b-a9e5-4f34-8220-04441511bae8
+		summarizeBy: none
+		sourceColumn: Price Band Order
+
+	column 'Delivery Minutes'
+		dataType: double
+		formatString: 0
+		lineageTag: 51fce689-6f8d-4e5f-ac61-555a8959f3d9
+		summarizeBy: none
+		sourceColumn: Delivery Minutes
+
+	column 'Delivery Speed'
+		dataType: string
+		lineageTag: 74aea57d-e233-4005-8516-a373f7fcdd2a
+		summarizeBy: none
+		sourceColumn: Delivery Speed
+		sortByColumn: 'Delivery Speed Order'
+
+	column 'Delivery Speed Order'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: fcade0f5-ee76-4f52-8031-5b6ba33de2fd
+		summarizeBy: none
+		sourceColumn: Delivery Speed Order
+
+	column 'Delivery Status'
+		dataType: string
+		lineageTag: 80791791-984b-4b13-b775-91799f13d33f
+		summarizeBy: none
+		sourceColumn: Delivery Status
+
+	column 'Safety Level'
+		dataType: string
+		lineageTag: 130ecfb9-53a5-4fd6-a629-7a39e554d4a7
+		summarizeBy: none
+		sourceColumn: Safety Level
+
+	measure 'Total Restaurants' = COUNTROWS(Restaurants)
+		formatString: #,0
+		lineageTag: 482a4e92-592a-4251-b75f-07871a1dd9da
+
+	measure 'Unique Brands' = DISTINCTCOUNT(Restaurants[Brand])
+		formatString: #,0
+		lineageTag: 6c033dcc-070d-4c0c-8730-0ef68712de98
+
+	measure 'Cities Covered' = DISTINCTCOUNT(Restaurants[City])
+		formatString: #,0
+		lineageTag: feba9721-be7f-4169-8f1a-5a3952c2ec54
+
+	measure 'Avg Rating' = AVERAGE(Restaurants[Rating])
+		formatString: 0.00
+		lineageTag: b1ee4cd3-f7f4-4ca9-85c3-d383f606ab71
+
+	measure 'Highly Rated %' = DIVIDE(CALCULATE(COUNTROWS(Restaurants), Restaurants[Rating] >= 4), CALCULATE(COUNTROWS(Restaurants), Restaurants[Rating] <> BLANK()))
+		formatString: 0.0%
+		lineageTag: 0260ca0e-d9f6-4eb2-b478-5e5790bfaf9b
+
+	measure 'Avg Price for One' = AVERAGE(Restaurants[Price for One])
+		formatString: #,0
+		lineageTag: dd55409c-52aa-4cf8-a59e-f5dd1f7c18de
+
+	measure 'Avg Delivery Time (min)' = AVERAGE(Restaurants[Delivery Minutes])
+		formatString: 0.0
+		lineageTag: 08bb8a94-7599-42f1-a4a0-81adcbef121e
+
+	measure 'Max Safety %' = DIVIDE(CALCULATE(COUNTROWS(Restaurants), Restaurants[Safety Level] = "Max Safety"), COUNTROWS(Restaurants))
+		formatString: 0.0%
+		lineageTag: 38268a4f-2ea2-43e7-a857-4a48e2adf811
+
+	measure 'Top 10 Cities' = VAR r = RANKX(ALLSELECTED(Restaurants[City]), [Total Restaurants], , DESC, Dense) RETURN IF(r <= 10, [Total Restaurants])
+		formatString: #,0
+		lineageTag: 707d18b1-97db-41c2-9f33-6ec3b740f84c
+
+	measure 'Top 15 Cities' = VAR r = RANKX(ALLSELECTED(Restaurants[City]), [Total Restaurants], , DESC, Dense) RETURN IF(r <= 15, [Total Restaurants])
+		formatString: #,0
+		lineageTag: db71d4ac-7a5f-40ed-bf93-a3a5b53f5ede
+
+	measure 'Top 12 States' = VAR r = RANKX(ALLSELECTED(Restaurants[State]), [Total Restaurants], , DESC, Dense) RETURN IF(r <= 12, [Total Restaurants])
+		formatString: #,0
+		lineageTag: 27733aa2-d567-4665-8f93-4db983fb0eb3
+
+	measure 'Priciest Cities (Avg Price)' = VAR t = FILTER(ALLSELECTED(Restaurants[City]), [Total Restaurants] >= 300) VAR r = RANKX(t, [Avg Price for One], , DESC, Dense) RETURN IF([Total Restaurants] >= 300 && r <= 15, [Avg Price for One])
+		formatString: #,0
+		lineageTag: cfbf8963-9d1a-41f5-92ba-f4992cdd9fdb
+
+	measure 'Fastest Cities (Avg Min)' = VAR t = FILTER(ALLSELECTED(Restaurants[City]), [Total Restaurants] >= 300) VAR r = RANKX(t, [Avg Delivery Time (min)], , ASC, Dense) RETURN IF([Total Restaurants] >= 300 && r <= 12, [Avg Delivery Time (min)])
+		formatString: 0.0
+		lineageTag: 81bf8bac-aa1d-44fa-882d-d58b4574eeed
+
+	measure 'Top 5 States' = VAR r = RANKX(ALLSELECTED(Restaurants[State]), [Total Restaurants], , DESC, Dense) RETURN IF(r <= 5, [Total Restaurants])
+		formatString: #,0
+		lineageTag: 8771d910-a2cd-44a1-adf5-8439485752d7
+
+	measure 'Top 10 Cities Avg Rating' = IF(NOT ISBLANK([Top 10 Cities]), [Avg Rating])
+		formatString: 0.00
+		lineageTag: 8e5b9367-bc7d-4ecf-8473-32dda816a963
+
+	measure 'Note Restaurants' = FORMAT(DIVIDE([Total Restaurants], CALCULATE([Total Restaurants], ALL(Restaurants))), "0.0%") & " of all listings"
+		lineageTag: fcdc7ab0-4b62-49d2-ada6-807f6d2b7ba5
+
+	measure 'Note Brands' = FORMAT(DIVIDE([Total Restaurants], [Unique Brands]), "0.0") & " outlets per brand"
+		lineageTag: 2a7a5a16-4464-4329-bf9c-fde21b120bf7
+
+	measure 'Note Cities' = FORMAT(DISTINCTCOUNT(Restaurants[State]), "0") & " states covered"
+		lineageTag: e83b40f3-682e-4dbb-bc65-a5945e259365
+
+	measure 'Note Rating' = VAR d = [Avg Rating] - CALCULATE([Avg Rating], ALL(Restaurants)) RETURN IF(d >= 0, "▲ ", "▼ ") & FORMAT(ABS(d), "0.00") & " vs India"
+		lineageTag: 7452da27-09ba-47ae-bf9e-9a5e6ae17efe
+
+	measure 'Note Highly Rated' = VAR d = ([Highly Rated %] - CALCULATE([Highly Rated %], ALL(Restaurants))) * 100 RETURN IF(d >= 0, "▲ ", "▼ ") & FORMAT(ABS(d), "0.0") & " pts vs India"
+		lineageTag: 19b1cde9-9abc-4cba-941e-a967f516cd8e
+
+	measure 'Note Price' = VAR d = [Avg Price for One] - CALCULATE([Avg Price for One], ALL(Restaurants)) RETURN IF(d >= 0, "▲ ₹", "▼ ₹") & FORMAT(ABS(d), "0") & " vs India"
+		lineageTag: 43e32776-7b1f-4036-aeb6-d8eef20b6c4f
+
+	measure 'Note Delivery' = VAR d = [Avg Delivery Time (min)] - CALCULATE([Avg Delivery Time (min)], ALL(Restaurants)) RETURN IF(d >= 0, "▲ ", "▼ ") & FORMAT(ABS(d), "0.0") & " min vs India"
+		lineageTag: 363fce75-9836-43ca-8985-a46791bcd204
+
+	measure 'Note Safety' = VAR d = ([Max Safety %] - CALCULATE([Max Safety %], ALL(Restaurants))) * 100 RETURN IF(d >= 0, "▲ ", "▼ ") & FORMAT(ABS(d), "0.0") & " pts vs India"
+		lineageTag: f235ec5d-4885-46d7-82aa-6a10cc08cdaf
+
+	measure 'Slowest Cities (Avg Min)' = VAR t = FILTER(ALLSELECTED(Restaurants[City]), [Total Restaurants] >= 300) VAR r = RANKX(t, [Avg Delivery Time (min)], , DESC, Dense) RETURN IF([Total Restaurants] >= 300 && r <= 12, [Avg Delivery Time (min)])
+		formatString: 0.0
+		lineageTag: d1c1f03b-59ab-4285-86d0-098ff9a7d26a
+
+	partition Restaurants = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "restaurants.csv"), [Delimiter=",", Columns=20, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Restaurant ID", Int64.Type}, {"Restaurant Name", type text}, {"Brand", type text}, {"City", type text}, {"State", type text}, {"Region", type text}, {"Rating", type number}, {"Rating Status", type text}, {"Rating Band", type text}, {"Rating Band Order", Int64.Type}, {"Primary Cuisine", type text}, {"Cuisine Count", Int64.Type}, {"Price for One", type number}, {"Price Band", type text}, {"Price Band Order", Int64.Type}, {"Delivery Minutes", type number}, {"Delivery Speed", type text}, {"Delivery Speed Order", Int64.Type}, {"Delivery Status", type text}, {"Safety Level", type text}}, "en-US")
+				in
+				    Typed

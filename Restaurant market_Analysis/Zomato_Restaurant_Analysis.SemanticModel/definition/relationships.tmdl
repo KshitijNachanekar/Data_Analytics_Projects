@@ -1,0 +1,3 @@
+relationship 769d9dfb-8023-4840-bd4c-f24ebaa1bfba
+	fromColumn: Cuisines.'Restaurant ID'
+	toColumn: Restaurants.'Restaurant ID'

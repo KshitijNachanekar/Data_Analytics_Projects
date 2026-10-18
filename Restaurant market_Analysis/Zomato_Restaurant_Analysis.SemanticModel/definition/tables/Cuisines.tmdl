@@ -1,0 +1,58 @@
+table Cuisines
+	lineageTag: 4a32c239-f38c-4283-9641-72f6c59bd8d6
+
+	column 'Restaurant ID'
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 3bb3916a-7653-42f3-bb07-8ece0c31e876
+		summarizeBy: none
+		sourceColumn: Restaurant ID
+
+	column Cuisine
+		dataType: string
+		lineageTag: 74ae43cc-eeb3-4df7-ac4e-6c6650b2f259
+		summarizeBy: none
+		sourceColumn: Cuisine
+
+	measure 'Cuisine Listings' = COUNTROWS(Cuisines)
+		formatString: #,0
+		lineageTag: e39cadc2-629a-4cea-9dcf-8e65e19a5929
+
+	measure 'Avg Rating by Cuisine' = AVERAGEX(Cuisines, RELATED(Restaurants[Rating]))
+		formatString: 0.00
+		lineageTag: 003da12e-48e8-4576-af36-7cde11ad5fe9
+
+	measure 'Avg Price by Cuisine' = AVERAGEX(Cuisines, RELATED(Restaurants[Price for One]))
+		formatString: #,0
+		lineageTag: ac4f61a4-b9ca-48ee-a824-21f5dc120a05
+
+	measure 'Top 15 Cuisines' = VAR r = RANKX(ALLSELECTED(Cuisines[Cuisine]), [Cuisine Listings], , DESC, Dense) RETURN IF(r <= 15, [Cuisine Listings])
+		formatString: #,0
+		lineageTag: d6743a45-fbce-4b9a-8b9d-4b5cbdb44d6d
+
+	measure 'Top 5 Cuisines' = VAR r = RANKX(ALLSELECTED(Cuisines[Cuisine]), [Cuisine Listings], , DESC, Dense) RETURN IF(r <= 5, [Cuisine Listings])
+		formatString: #,0
+		lineageTag: b00fa053-e1a0-4cae-bb20-aee951aa410f
+
+	measure 'Top 6 Cuisines' = VAR r = RANKX(ALLSELECTED(Cuisines[Cuisine]), [Cuisine Listings], , DESC, Dense) RETURN IF(r <= 6, [Cuisine Listings])
+		formatString: #,0
+		lineageTag: 9fddc889-8eeb-44f8-b27c-d2cf47c71f06
+
+	measure 'Top Rated Cuisines (300+ listings)' = VAR t = FILTER(ALLSELECTED(Cuisines[Cuisine]), [Cuisine Listings] >= 300) VAR r = RANKX(t, [Avg Rating by Cuisine], , DESC, Dense) RETURN IF([Cuisine Listings] >= 300 && r <= 15, [Avg Rating by Cuisine])
+		formatString: 0.00
+		lineageTag: d8d07840-ac62-4e26-b796-70f648a4d82f
+
+	measure 'Priciest Cuisines (300+ listings)' = VAR t = FILTER(ALLSELECTED(Cuisines[Cuisine]), [Cuisine Listings] >= 300) VAR r = RANKX(t, [Avg Price by Cuisine], , DESC, Dense) RETURN IF([Cuisine Listings] >= 300 && r <= 15, [Avg Price by Cuisine])
+		formatString: #,0
+		lineageTag: afc660e3-cb5b-4f7e-a0d7-cd7a248a06a0
+
+	partition Cuisines = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "cuisines.csv"), [Delimiter=",", Columns=2, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Restaurant ID", Int64.Type}, {"Cuisine", type text}}, "en-US")
+				in
+				    Typed

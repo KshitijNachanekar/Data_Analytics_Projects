@@ -1,0 +1,15 @@
+# Data (Kaggle licence not stated: download it yourself, see README)
+data/*.csv
+raw/*
+!raw/.gitkeep
+!raw/README.txt
+!data/.gitkeep
+# Power BI local files
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+*.pbix.bak
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+__pycache__/
